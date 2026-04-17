@@ -1,42 +1,97 @@
 "use client";
 
 /**
- * Collapsible definitions for results — mirrors how consumer valuation sites explain bands vs. appraisals.
+ * Expanded definitions for results — how to read bands, indices, and optional rows.
  */
 export function ResultsExplainer() {
   return (
-    <details className="rounded-lg border border-neutral-200 bg-neutral-50/80 dark:border-neutral-700 dark:bg-neutral-900/30">
-      <summary className="cursor-pointer px-4 py-3 text-left text-xs font-medium text-neutral-700 dark:text-neutral-300">
+    <details
+      open
+      className="rounded-lg border border-neutral-200 bg-neutral-50/80 dark:border-neutral-700 dark:bg-neutral-900/30"
+    >
+      <summary className="cursor-pointer px-4 py-3 text-left text-sm font-medium text-neutral-800 dark:text-neutral-200">
         Understanding these numbers
       </summary>
-      <div className="space-y-4 border-t border-neutral-200 px-4 pb-4 pt-3 text-xs leading-relaxed text-neutral-600 dark:border-neutral-700 dark:text-neutral-400">
-        <p>
-          <strong className="text-neutral-800 dark:text-neutral-200">Market value range</strong> — Model band for an orderly
-          sale, anchored on circle-rate logic and comps in your radius. Not a list price or guarantee.
+      <div className="space-y-6 border-t border-neutral-200 px-4 pb-5 pt-4 text-xs leading-relaxed text-neutral-600 dark:border-neutral-700 dark:text-neutral-400">
+        <p className="text-[13px] text-neutral-700 dark:text-neutral-300">
+          Tenzor outputs are produced by a <strong className="font-medium text-neutral-900 dark:text-neutral-100">transparent rule engine</strong> (circle-rate tables, property adjustments, comparable listings in your chosen radius, liquidity heuristics). They are{" "}
+          <strong className="font-medium text-neutral-900 dark:text-neutral-100">ranges and indices</strong>, not a single “true” price and not a substitute for a licensed appraisal or a lender’s own policy.
         </p>
-        <p>
-          <strong className="text-neutral-800 dark:text-neutral-200">Distress value range</strong> — Lower band reflecting
-          liquidity stress; useful for stress tests, not a bid from a specific buyer.
-        </p>
-        <p>
-          <strong className="text-neutral-800 dark:text-neutral-200">Resale index (0–100)</strong> — Higher suggests easier
-          exit under the model; it is not a credit score.
-        </p>
-        <p>
-          <strong className="text-neutral-800 dark:text-neutral-200">Time to sell (days)</strong> — Illustrative exit
-          window from rule-based liquidity, not a listing commitment.
-        </p>
-        <p>
-          <strong className="text-neutral-800 dark:text-neutral-200">Confidence</strong> — Internal 0–1 score for how
-          much evidence the run had (comps, location resolution, etc.).
-        </p>
-        <p>
-          <strong className="text-neutral-800 dark:text-neutral-200">Comps</strong> — Count of comparable listings used
-          inside your km radius (seed data ± optional feeds). Thin markets widen uncertainty.
-        </p>
-        <p className="border-t border-neutral-200 pt-3 text-[10px] text-neutral-500 dark:border-neutral-600 dark:text-neutral-500">
-          Demo only — not an appraisal or lending advice. Institutional workflows use licensed valuations and compliance
-          checks beyond this tool.
+
+        <section>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+            Core outputs
+          </h3>
+          <ul className="mt-2 list-none space-y-3">
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Market value range (₹ min–max)</strong>
+              <p className="mt-1 pl-0">
+                A band for an <em>orderly</em> sale under the model: anchored on statutory/illustrative circle-rate logic, blended with comparable ₹/sqft where listings exist in radius, then adjusted for property attributes. The spread reflects model uncertainty — not your listing price or a bank’s approved value.
+              </p>
+            </li>
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Distress value range (₹ min–max)</strong>
+              <p className="mt-1">
+                A lower band that applies a <em>liquidity discount</em> to the market band — useful for stress scenarios (“if we had to exit quickly”). It does not predict an actual auction or buyer bid.
+              </p>
+            </li>
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Resale potential index (0–100)</strong>
+              <p className="mt-1">
+                A single score summarizing how easily the model expects the asset class and micro-market context to resell, relative to other runs — <strong className="font-medium text-neutral-800 dark:text-neutral-200">not</strong> a credit score, ESG score, or regulatory metric.
+              </p>
+            </li>
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Time to sell (days, min–max)</strong>
+              <p className="mt-1">
+                An illustrative calendar window from rule-based liquidity (comps density, resale index, property type). Use it for directional planning only; real time-on-market depends on pricing, marketing, and macro conditions.
+              </p>
+            </li>
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Confidence (0–1)</strong>
+              <p className="mt-1">
+                An internal score for how much <em>evidence</em> this run had: e.g. location resolved to a city row, enough comps in radius, fewer portal failures. Low confidence does not mean “bad asset” — it often means thin data or optional feeds did not respond.
+              </p>
+            </li>
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Comps (count · km)</strong>
+              <p className="mt-1">
+                Number of comparable listings that contributed inside your <strong className="font-medium text-neutral-800 dark:text-neutral-200">comp radius</strong>. Fewer comps usually means wider bands and lower confidence. Seed data and optional portal listings are combined where enabled.
+              </p>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+            Optional rows (when shown)
+          </h3>
+          <ul className="mt-2 list-disc space-y-2 pl-4">
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Comps split</strong> — Breakdown of how many comps came from bundled seed data vs MagicBricks / other portals (labels like MB, 99acres, H, NB). Helps you see whether the estimate leaned on seed listings or live feeds.
+            </li>
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Landmark signals</strong> — Coarse amenity hints when portal comp payloads include landmark metadata; they nudge the model slightly and are not a full GIS study.
+            </li>
+            <li>
+              <strong className="text-neutral-800 dark:text-neutral-200">Portal / MagicBricks errors</strong> — Fetch or parse failed (cookies missing, HTML instead of JSON, rate limits). The engine still returns an estimate using seed comps and circle-rate logic when possible.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h3 className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500">
+            How to use this responsibly
+          </h3>
+          <ul className="mt-2 list-disc space-y-1.5 pl-4">
+            <li>Treat outputs as <strong className="font-medium text-neutral-800 dark:text-neutral-200">demo / pre-qualification</strong> material for workshops and integration tests.</li>
+            <li>Do not use as sole collateral evidence for credit approval, regulatory filings, or legal disputes.</li>
+            <li>Refresh inputs when location, size, or market conditions change; ranges are point-in-time.</li>
+          </ul>
+        </section>
+
+        <p className="border-t border-neutral-200 pt-4 text-[11px] text-neutral-500 dark:border-neutral-600 dark:text-neutral-500">
+          Institutional lending and appraisal workflows require licensed valuations, documented inspections, and compliance with local law — beyond what this tool provides.
         </p>
       </div>
     </details>

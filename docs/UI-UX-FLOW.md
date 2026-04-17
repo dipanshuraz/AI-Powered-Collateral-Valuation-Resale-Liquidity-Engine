@@ -162,12 +162,9 @@ The wizard is replaced by:
 
 1. **Progress strip** showing all steps complete with an extra **Results** marker (visual completion).
 2. **`ResultsPanel`:** primary card with **Market value**, **Distress value**, **Resale index**, **Time to sell (days)**, **Confidence**, **Comps** (count + radius), optional **Comps split**, **Landmark signals**, portal errors if any.
-3. Optional **resolved location** JSON block (mono).
-4. **Drivers** and **Risk flags** (bulleted lists).
-5. Results show numeric ranges, drivers, flags, and optional raw JSON for debugging.
-6. **Raw JSON** `<details>` for debugging.
-7. **`assumptions_version`** footnote.
-8. **New estimate** resets form and returns to step 1.
+3. **Understanding these numbers** — expanded `<details>` (default open) explaining ranges, indices, optional rows, and responsible use.
+4. **`assumptions_version`** footnote.
+5. **New estimate** resets form and returns to step 1.
 
 ---
 

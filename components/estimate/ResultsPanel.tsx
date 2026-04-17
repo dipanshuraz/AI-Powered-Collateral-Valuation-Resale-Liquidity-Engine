@@ -1,23 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
 import type { EstimateResponsePayload } from "@/lib/flow/types";
 import { fmtInr } from "@/lib/format";
 import { ResultsExplainer } from "@/components/estimate/ResultsExplainer";
 
-/** Omit verbose fields already surfaced elsewhere or intentionally hidden from the main UI. */
-function resultJsonForDeveloperView(r: EstimateResponsePayload) {
-  const {
-    resolved_location: _loc,
-    key_drivers: _drivers,
-    risk_flags: _flags,
-    ...rest
-  } = r;
-  return rest;
-}
-
 export function ResultsPanel({ result }: { result: EstimateResponsePayload }) {
-  const rawJson = useMemo(() => resultJsonForDeveloperView(result), [result]);
   return (
     <div className="space-y-8">
       <div className="rounded-xl border border-neutral-200 bg-gradient-to-b from-neutral-50 to-white p-6 dark:border-neutral-700 dark:from-neutral-900/50 dark:to-neutral-950">
@@ -83,15 +70,6 @@ export function ResultsPanel({ result }: { result: EstimateResponsePayload }) {
       </div>
 
       <ResultsExplainer />
-
-      <details className="rounded-lg border border-neutral-200 dark:border-neutral-700">
-        <summary className="cursor-pointer px-4 py-3 text-xs text-neutral-500">
-          Raw JSON
-        </summary>
-        <pre className="max-h-80 overflow-auto border-t border-neutral-200 p-4 font-mono text-[10px] dark:border-neutral-700">
-          {JSON.stringify(rawJson, null, 2)}
-        </pre>
-      </details>
 
       <p className="text-[10px] text-neutral-400">
         assumptions_version: {result.assumptions_version}

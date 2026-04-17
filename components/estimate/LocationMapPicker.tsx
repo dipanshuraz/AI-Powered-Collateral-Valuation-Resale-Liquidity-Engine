@@ -76,11 +76,23 @@ function useLeafletDefaultIcon() {
   }, []);
 }
 
-/** Leaflet throws if L.map() runs twice on the same DOM node; React 18 Strict Mode + ref timing can trigger that. */
-function useMapContainerReady() {
+/**
+ * Defer mounting the map until after paint so any previous Leaflet instance on this
+ * subtree is fully torn down (helps with Strict Mode and fast step navigation).
+ */
+function useDeferredMapMount() {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    setReady(true);
+    let cancelled = false;
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (!cancelled) setReady(true);
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(id);
+    };
   }, []);
   return ready;
 }
@@ -92,10 +104,10 @@ export function LocationMapPicker({
   onAddressResolved,
 }: Props) {
   useLeafletDefaultIcon();
-  const mapContainerReady = useMapContainerReady();
-  /** Stable per widget instance so MapContainer never reconciles onto a “dirty” div. */
+  const mapContainerReady = useDeferredMapMount();
+  /** Unique id for the map wrapper so React never reuses a DOM node Leaflet has touched. */
   const mapInstanceKey = useMemo(
-    () => `leaflet-map-${Math.random().toString(36).slice(2, 11)}`,
+    () => `leaflet-${Math.random().toString(36).slice(2, 11)}`,
     []
   );
 
@@ -178,7 +190,10 @@ export function LocationMapPicker({
         control (top-right) to switch to aerial imagery (Esri) for rough land context. Address
         fill uses our server + Nominatim (throttled).
       </p>
-      <div className="overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700 [&_.leaflet-container]:z-[1] [&_.leaflet-container]:min-h-[240px] [&_.leaflet-container]:w-full [&_.leaflet-container]:font-[family-name:var(--font-geist-sans)]">
+      <div
+        key={mapInstanceKey}
+        className="overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700 [&_.leaflet-container]:z-[1] [&_.leaflet-container]:min-h-[240px] [&_.leaflet-container]:w-full [&_.leaflet-container]:font-[family-name:var(--font-geist-sans)]"
+      >
         {!mapContainerReady ? (
           <div
             className="animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800"
@@ -187,7 +202,6 @@ export function LocationMapPicker({
           />
         ) : (
           <MapContainer
-            key={mapInstanceKey}
             center={center}
             zoom={zoom}
             scrollWheelZoom
