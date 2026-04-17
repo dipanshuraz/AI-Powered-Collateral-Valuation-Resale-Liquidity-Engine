@@ -34,7 +34,7 @@ export default function HomePage() {
           A structured engine for <strong className="font-medium text-neutral-800 dark:text-neutral-200">market</strong> and{" "}
           <strong className="font-medium text-neutral-800 dark:text-neutral-200">distress</strong> value ranges, a{" "}
           <strong className="font-medium text-neutral-800 dark:text-neutral-200">resale index</strong>,{" "}
-          <strong className="font-medium text-neutral-800 dark:text-neutral-200">time-to-liquidate</strong>, confidence, drivers, and risk flags — with optional listing comps and AI narrative.
+          <strong className="font-medium text-neutral-800 dark:text-neutral-200">time-to-liquidate</strong>, confidence, drivers, and risk flags — with optional listing comps.
         </p>
 
         <ul className="mt-10 space-y-4 text-sm text-neutral-700 dark:text-neutral-300">

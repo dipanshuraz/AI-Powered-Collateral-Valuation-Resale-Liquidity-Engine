@@ -15,7 +15,6 @@ export type EstimateFormState = {
   tenure: string;
   occupancy: string;
   yieldPct: string;
-  includeAi: boolean;
   mbEnabled: boolean;
   mbCityId: string;
   mbLocalityId: string;
@@ -29,6 +28,8 @@ export type EstimateFormState = {
   locationNotes: string;
   legalNotes: string;
   docsSummary: string;
+  /** PNG data URL from optional review-step signature pad (client-only; not sent to API). */
+  acknowledgmentSignatureDataUrl: string;
 };
 
 export type EstimateResponsePayload = {
@@ -44,7 +45,6 @@ export type EstimateResponsePayload = {
   data_sources: string[];
   assumptions_version: string;
   resolved_location?: Record<string, unknown>;
-  ai_summary?: string;
   magicbricks_error?: string;
   landmark_signals?: string[];
   comps_breakdown?: {

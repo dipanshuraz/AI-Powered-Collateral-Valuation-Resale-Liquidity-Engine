@@ -1,11 +1,11 @@
 # Project overview (one glance)
 
-**Tenzor** is a **demo** web app for **Problem 4a**: *AI-powered collateral valuation & resale liquidity* — range-based **market** and **distress** values, **resale index (0–100)**, **time-to-liquidate (days)**, **confidence**, **drivers**, and **risk flags**. It is **not** a licensed appraisal.
+**Tenzor** is a **demo** web app for **Problem 4a**: collateral **valuation & resale liquidity** — range-based **market** and **distress** values, **resale index (0–100)**, **time-to-liquidate (days)**, **confidence**, **drivers**, and **risk flags**. It is **not** a licensed appraisal.
 
 | What | Summary |
 |------|---------|
 | **Stack** | Next.js 15 (App Router), TypeScript, Tailwind, Zod |
-| **Core API** | `POST /api/estimate` — server-only valuation; optional OpenAI **explanation** of the same JSON (no invented ₹) |
+| **Core API** | `POST /api/estimate` — server-only rule-based valuation |
 | **Pricing engine** | Circle-rate floor (`data/circle_rates.json`) + rules + blend with **comps in km radius** (Haversine) |
 | **Comps** | Seed file `data/comps_seed.json` + optional **live JSON** from listing portals (URLs + cookies; demo / ToS aware) |
 | **UI** | Landing **`/`** + wizard **`/estimate`** (steps: Location → Property → Details → Review → Results); Pune-friendly defaults |
@@ -16,7 +16,7 @@
 1. User sends **address or lat/lon**, property facts, optional **collateral context** text.
 2. Server resolves coordinates (Nominatim if needed), matches **circle rate** (named city or tier fallback).
 3. Builds **model band**, merges **listing comps** inside **radius** (median ₹/sqft), applies **liquidity** + **landmark** heuristics where applicable.
-4. Returns JSON + optional **AI summary** if `OPENAI_API_KEY` + `include_ai_summary`.
+4. Returns structured JSON (ranges, RPI, drivers, flags).
 
 ## Key paths
 
@@ -33,7 +33,6 @@
 | `lib/comps/query.ts` | Radius query + merge |
 | `lib/magicbricks/` | MagicBricks `propertySearch` fetch + landmark parsing |
 | `lib/portals/` | 99acres / Housing / NoBroker URL fetch + JSON heuristics |
-| `lib/ai/explain.ts` | Bounded LLM narrative |
 | `data/circle_rates.json` | Illustrative circle-rate rows |
 | `data/comps_seed.json` | Seed comps (e.g. Pune + NCR + Bengaluru) |
 
@@ -41,7 +40,6 @@
 
 | Variable | Purpose |
 |----------|---------|
-| `OPENAI_API_KEY` | Optional AI summary |
 | `MAGICBRICKS_COOKIE` | Optional session for MagicBricks JSON |
 | `ACRES99_COOKIE` / `HOUSING_COOKIE` / `NOBROKER_COOKIE` | Optional per-portal session |
 | `LISTING_PORTALS_COOKIE` | Shared fallback cookie for portal GETs |

@@ -8,7 +8,6 @@ export function buildEstimateBody(s: EstimateFormState): Record<string, unknown>
     size_sqft: Number(s.sizeSqft),
     age_bucket: s.ageBucket,
     comp_radius_km: Number(s.compRadius) || 8,
-    include_ai_summary: s.includeAi,
   };
 
   if (s.address.trim()) body.address = s.address.trim();

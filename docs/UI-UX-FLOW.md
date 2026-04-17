@@ -69,7 +69,7 @@ flowchart TD
 | Element | Behavior |
 |---------|----------|
 | Header | Brand “Tenzor”; primary **Start estimate** → `/estimate`. |
-| Hero | Title, short description (market/distress ranges, resale index, TTL, optional comps & AI). |
+| Hero | Title, short description (market/distress ranges, resale index, TTL, optional comps). |
 | Bullets | Reinforce flow, engine, disclaimer. |
 | **Begin full flow** | Secondary CTA style; same destination as header CTA. |
 | Footer | Short legal/demo note. |
@@ -135,7 +135,7 @@ Server-side validation and errors from `/api/estimate` appear in the **red alert
 - Intro: legal, occupancy, feeds, notes.
 - **Floor** (number), **Lift access** (**Checkbox**).
 - **Tenure**, **Title clarity**, **Occupancy**, **Rental yield %** (selects / number).
-- **AI summary** (**Checkbox**); server-side key required for AI text in results.
+- Optional **collateral context** text fields (keywords feed drivers only).
 - **Listing feeds (optional)** — **Collapsible** (collapsed by default): MagicBricks toggles + optional IDs/URL; other portals with URL fields; checkboxes per feed.
 - **Collateral context:** three **Field.Textarea** blocks (location notes, legal/RERA, documents summary).
 
@@ -164,7 +164,7 @@ The wizard is replaced by:
 2. **`ResultsPanel`:** primary card with **Market value**, **Distress value**, **Resale index**, **Time to sell (days)**, **Confidence**, **Comps** (count + radius), optional **Comps split**, **Landmark signals**, portal errors if any.
 3. Optional **resolved location** JSON block (mono).
 4. **Drivers** and **Risk flags** (bulleted lists).
-5. Optional **AI summary** (highlighted card) when returned.
+5. Results show numeric ranges, drivers, flags, and optional raw JSON for debugging.
 6. **Raw JSON** `<details>` for debugging.
 7. **`assumptions_version`** footnote.
 8. **New estimate** resets form and returns to step 1.

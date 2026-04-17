@@ -15,6 +15,8 @@ import type { EstimateFormState, EstimateResponsePayload } from "@/lib/flow/type
 type Ctx = {
   form: EstimateFormState;
   setForm: (patch: Partial<EstimateFormState>) => void;
+  /** Bumps when the flow resets so optional signature pad state remounts cleanly. */
+  acknowledgmentPadKey: number;
   activeStep: number;
   setActiveStep: (n: number) => void;
   isSubmitting: boolean;
@@ -29,6 +31,7 @@ const EstimateFormContext = createContext<Ctx | null>(null);
 
 export function EstimateFormProvider({ children }: { children: ReactNode }) {
   const [form, setFormState] = useState<EstimateFormState>(getDefaultFormState);
+  const [acknowledgmentPadKey, setAcknowledgmentPadKey] = useState(0);
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [result, setResult] = useState<EstimateResponsePayload | null>(null);
@@ -42,6 +45,7 @@ export function EstimateFormProvider({ children }: { children: ReactNode }) {
 
   const resetFlow = useCallback(() => {
     setFormState(getDefaultFormState());
+    setAcknowledgmentPadKey((k) => k + 1);
     setActiveStep(1);
     setResult(null);
     setError(null);
@@ -78,6 +82,7 @@ export function EstimateFormProvider({ children }: { children: ReactNode }) {
     () => ({
       form,
       setForm,
+      acknowledgmentPadKey,
       activeStep,
       setActiveStep,
       isSubmitting,
@@ -90,6 +95,7 @@ export function EstimateFormProvider({ children }: { children: ReactNode }) {
     [
       form,
       setForm,
+      acknowledgmentPadKey,
       activeStep,
       isSubmitting,
       result,

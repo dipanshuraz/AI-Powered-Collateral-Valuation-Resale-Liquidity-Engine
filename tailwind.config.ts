@@ -11,6 +11,9 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        bitcount: ["ui-serif", "Georgia", "serif"],
+        goldman: ["system-ui", "sans-serif"],
+        montserrat: ["system-ui", "sans-serif"],
       },
       colors: {
         surface: "rgb(var(--surface) / <alpha-value>)",

@@ -1,4 +1,4 @@
-# PRD — AI-Powered Collateral Valuation & Resale Liquidity Engine
+# PRD — Collateral Valuation & Resale Liquidity Engine
 
 **Read first:** [`PROBLEM-4A-SPECIFICATION-AND-PLAN.md`](./PROBLEM-4A-SPECIFICATION-AND-PLAN.md) (full PDF-derived spec) · [`PROJECT-OVERVIEW.md`](./PROJECT-OVERVIEW.md) · [`ARCHITECTURE.md`](./ARCHITECTURE.md) · [README](../README.md)
 
@@ -6,7 +6,7 @@
 |-------|--------|
 | **Product** | Demo web app — hackathon Problem **4a** (collateral estimation / portal) |
 | **Stack** | Next.js 15, TypeScript, Tailwind, Zod |
-| **Status** | Implemented baseline + optional portals + optional AI summary |
+| **Status** | Implemented baseline + optional portals |
 
 ---
 
@@ -23,9 +23,9 @@ A **data-led** collateral layer: **market and distress ranges**, **resale potent
 | G1 | Target JSON outputs (ranges, index, days, confidence, drivers, flags) | Yes |
 | G2 | No proprietary transaction DB; circle rates + public/synthetic assumptions | Yes |
 | G3 | Deploy easily (Vercel + env) | Yes |
-| G4 | Explainable outputs + optional LLM narrative **grounded** in JSON | Yes |
+| G4 | Explainable outputs (drivers, flags, data sources) | Yes |
 | G5 | Comps within **radius** (km) | Yes |
-| G6 | AI **bounded** — explanation only, not primary pricer | Yes |
+| G6 | Transparent rule engine — not an opaque black-box pricer | Yes |
 
 ---
 
@@ -62,15 +62,11 @@ A **data-led** collateral layer: **market and distress ranges**, **resale potent
 
 - `collateral_context`: `location_notes`, `legal_rera_notes`, `documents_summary` — keyword-style drivers, **not** a second pricing model.
 
-**Optional — AI**
-
-- `include_ai_summary` — requires `OPENAI_API_KEY` on server.
-
 ### 5.2 Outputs
 
 Core: `market_value_range`, `distress_value_range`, `resale_potential_index`, `estimated_time_to_sell_days`, `confidence_score`, `key_drivers`, `risk_flags`.
 
-Extended: `data_sources`, `assumptions_version`, `resolved_location`, `comps_breakdown`, `landmark_signals`, `magicbricks_error`, `portal_feed_errors`, `ai_summary`.
+Extended: `data_sources`, `assumptions_version`, `resolved_location`, `comps_breakdown`, `landmark_signals`, `magicbricks_error`, `portal_feed_errors`.
 
 ### 5.3 Valuation & liquidity
 
@@ -81,12 +77,7 @@ Extended: `data_sources`, `assumptions_version`, `resolved_location`, `comps_bre
 
 - Extreme residential size flag; model vs listing median mismatch flag; context keyword tags — **not** fraud-proof.
 
-### 5.5 AI
-
-- Post-calculation narrative only (`lib/ai/explain.ts`).
-- **Forbidden:** LLM invents new numeric ranges not produced by engine.
-
-### 5.6 Portals
+### 5.5 Portals
 
 - **Demo / optional**; cookies may be required; **respect each portal’s Terms of Use**.
 - Degrade gracefully: seed comps + flags if feeds fail.
@@ -97,7 +88,7 @@ Extended: `data_sources`, `assumptions_version`, `resolved_location`, `comps_bre
 
 - **Minimal** single-column layout: `app/page.tsx`.
 - Defaults for **Pune** testing (address / lat / lon / radius).
-- **More** section: MagicBricks, 99acres / Housing / NoBroker URLs, collateral text, AI checkbox.
+- **Details** step: MagicBricks, 99acres / Housing / NoBroker URLs, collateral text fields.
 
 ---
 
@@ -106,7 +97,7 @@ Extended: `data_sources`, `assumptions_version`, `resolved_location`, `comps_bre
 | Area | Target |
 |------|--------|
 | Latency | Estimate completes without long blocking (portal GETs ~≤12s each) |
-| Security | API keys server-only (`OPENAI_*`, `*_COOKIE`) |
+| Security | Portal cookies server-only (`*_COOKIE`) where used |
 | Transparency | Footer disclaimer; `assumptions_version` in response |
 
 ---
@@ -119,7 +110,7 @@ Extended: `data_sources`, `assumptions_version`, `resolved_location`, `comps_bre
 | Liquidity | Index, distress, time range in `run-estimate.ts` |
 | Feature depth | Radius comps, landmarks, portal sources, context notes |
 | Deployability | Vercel + README + `.env.example` |
-| Explainability | Drivers/flags + optional JSON-grounded AI summary |
+| Explainability | Drivers, flags, `data_sources` |
 
 ---
 
@@ -133,10 +124,9 @@ Extended: `data_sources`, `assumptions_version`, `resolved_location`, `comps_bre
 
 ## 10. Open / future
 
-- Stronger LLM output validation (numeric grounding).
-- Template-based summary when no OpenAI key.
 - Per-portal response adapters as real JSON samples are captured.
 - Optional CSV upload for comps (stretch).
+- Stronger locality norm tables for size sanity checks.
 
 ---
 

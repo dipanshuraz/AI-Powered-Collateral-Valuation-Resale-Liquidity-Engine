@@ -37,7 +37,6 @@ export const estimateRequestSchema = z.object({
   occupancy: z.enum(["self_occupied", "rented", "vacant"]).optional(),
   rental_yield_percent: z.coerce.number().min(0).max(30).optional(),
   comp_radius_km: z.coerce.number().min(0.5).max(50).default(5),
-  include_ai_summary: z.boolean().optional().default(false),
   /** Optional live comps from MagicBricks `propertySearch` (server-side; may need MAGICBRICKS_COOKIE). */
   magicbricks: z
     .object({
@@ -95,7 +94,6 @@ export const estimateResponseSchema = z.object({
       circle_rate_source: z.enum(["city_table", "tier_fallback", "none"]),
     })
     .optional(),
-  ai_summary: z.string().optional(),
   magicbricks_error: z.string().optional(),
   /** Per-provider errors when a listing feed URL was enabled but fetch/parse failed. */
   portal_feed_errors: z.record(z.string()).optional(),

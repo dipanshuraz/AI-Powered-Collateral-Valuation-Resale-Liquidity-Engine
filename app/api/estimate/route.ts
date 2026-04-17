@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { estimateRequestSchema } from "@/lib/schemas";
 import { runEstimate } from "@/lib/engine/run-estimate";
-import { explainEstimate } from "@/lib/ai/explain";
 
 export const runtime = "nodejs";
 
@@ -23,10 +22,6 @@ export async function POST(req: Request) {
 
   try {
     const result = await runEstimate(parsed.data);
-    if (parsed.data.include_ai_summary) {
-      const summary = await explainEstimate(result);
-      if (summary) result.ai_summary = summary;
-    }
     return NextResponse.json(result);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Estimate failed";

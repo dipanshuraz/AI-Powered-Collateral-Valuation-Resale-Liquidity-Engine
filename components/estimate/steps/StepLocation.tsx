@@ -1,7 +1,24 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { Field } from "@ark-ui/react/field";
 import { useEstimateForm } from "@/contexts/EstimateFormContext";
+
+const LocationMapPicker = dynamic(
+  () =>
+    import("@/components/estimate/LocationMapPicker").then(
+      (m) => m.LocationMapPicker
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="min-h-[240px] animate-pulse rounded-lg border border-neutral-200 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-800"
+        aria-hidden
+      />
+    ),
+  }
+);
 
 export function StepLocation() {
   const { form, setForm } = useEstimateForm();
@@ -11,6 +28,14 @@ export function StepLocation() {
         Collateral location for circle-rate matching and comparable listings within
         radius.
       </p>
+
+      <LocationMapPicker
+        lat={form.lat}
+        lon={form.lon}
+        onPositionChange={(next) => setForm(next)}
+        onAddressResolved={(formattedAddress) => setForm({ address: formattedAddress })}
+      />
+
       <Field.Root>
         <Field.Label className="text-xs text-neutral-500">Address</Field.Label>
         <Field.Textarea
@@ -18,7 +43,7 @@ export function StepLocation() {
           rows={2}
           value={form.address}
           onChange={(e) => setForm({ address: e.target.value })}
-          placeholder="Area, city, state"
+          placeholder="Area, city, state — or pick on the map above"
         />
       </Field.Root>
       <div className="grid grid-cols-2 gap-6">

@@ -21,7 +21,6 @@ export function getDefaultFormState(): EstimateFormState {
     tenure: "freehold",
     occupancy: "self_occupied",
     yieldPct: "",
-    includeAi: false,
     mbEnabled: false,
     mbCityId: "4378",
     mbLocalityId: "82346",
@@ -35,5 +34,6 @@ export function getDefaultFormState(): EstimateFormState {
     locationNotes: "",
     legalNotes: "",
     docsSummary: "",
+    acknowledgmentSignatureDataUrl: "",
   };
 }

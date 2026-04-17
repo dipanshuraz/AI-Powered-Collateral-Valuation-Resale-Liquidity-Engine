@@ -5,11 +5,13 @@ import "./globals.css";
 const sans = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const mono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,11 +28,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const fontVars = [sans.variable, mono.variable].join(" ");
+
   return (
-    <html lang="en">
-      <body
-        className={`${sans.variable} ${mono.variable} min-h-screen antialiased`}
-      >
+    <html lang="en" className={fontVars}>
+      <body className={`${sans.className} min-h-screen antialiased`}>
         {children}
       </body>
     </html>

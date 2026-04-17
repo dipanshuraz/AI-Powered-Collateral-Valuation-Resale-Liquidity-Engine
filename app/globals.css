@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Body / mono: Inter + JetBrains Mono via next/font in app/layout.tsx (Tailwind: font-sans, font-mono). */
+
 :root {
   --surface: 255 255 255;
   --ink: 23 23 23;

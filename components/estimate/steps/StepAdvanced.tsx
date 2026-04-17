@@ -97,20 +97,6 @@ export function StepAdvanced() {
         </Field.Root>
       </div>
 
-      <Checkbox.Root
-        checked={form.includeAi}
-        onCheckedChange={(d) => setForm({ includeAi: d.checked === true })}
-        className="flex items-center gap-2"
-      >
-        <Checkbox.Control className={checkboxControlClass}>
-          <Checkbox.Indicator className="text-[10px] leading-none">✓</Checkbox.Indicator>
-        </Checkbox.Control>
-        <Checkbox.Label className="text-xs text-neutral-600 dark:text-neutral-400">
-          AI summary (requires OPENAI_API_KEY on server)
-        </Checkbox.Label>
-        <Checkbox.HiddenInput />
-      </Checkbox.Root>
-
       <Collapsible.Root defaultOpen={false} className="rounded-lg border border-neutral-200 bg-neutral-50/80 dark:border-neutral-700 dark:bg-neutral-900/40">
         <Collapsible.Trigger className="flex w-full cursor-pointer items-center justify-between gap-2 px-3 py-2.5 text-left text-xs font-medium text-neutral-700 outline-none hover:bg-neutral-100/80 dark:text-neutral-300 dark:hover:bg-neutral-800/50">
           <span>Listing feeds (optional)</span>

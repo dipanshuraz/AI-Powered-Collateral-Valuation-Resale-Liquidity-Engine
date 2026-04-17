@@ -1,6 +1,6 @@
 # Problem 4a — Full Specification & Delivery Plan
 
-**Source:** Problem Statement 4 — *AI Powered Estimation Portal/Chatbot*, option **(a)** — **AI-Powered Collateral Valuation & Resale Liquidity Engine**  
+**Source:** Problem Statement 4 — *Estimation Portal*, option **(a)** — **Collateral Valuation & Resale Liquidity Engine**. This repo implements a **transparent rule engine** (tables, comps, documented adjustments).  
 **Purpose of this document:** Single detailed reference: problem framing, required outputs, feature framework, modeling rules, inputs/outputs, fraud/safeguards, evaluation rubric, constraints, and how this maps to the **Tenzor** demo implementation — plus **gaps and backlog**.
 
 **Related project docs:** [`PROJECT-OVERVIEW.md`](./PROJECT-OVERVIEW.md) · [`PRD.md`](./PRD.md) · [`ARCHITECTURE.md`](./ARCHITECTURE.md)
@@ -70,7 +70,7 @@ The system **must** produce the following. **Ranges** are explicitly required wh
 | 3 | **Resale Potential Index** | **Integer 0–100** |
 | 4 | **Estimated Time to Liquidate** | **Days range** `[min, max]` — not a single number |
 | 5 | **Confidence Score** | **Float 0–1** (inclusive) |
-| 6 | **Key value drivers** | List (machine-oriented tags or short labels) |
+| 6 | **Key value drivers** | List (structured codes or short labels) |
 | 7 | **Risk flags** | List |
 
 ### B.1 Sample JSON (from PDF)
@@ -333,11 +333,11 @@ The brief organizes signals into **five** areas. Below: **PDF intent**, **data i
 | **Liquidity modeling** | **25%** | Coherent index, distress discount, time-to-sell **range** |
 | **Feature depth** | **20%** | Location + property + legal + market layers **represented** |
 | **Practical deployability** | **15%** | Runnable, env-based, honest data limits |
-| **Explainability** | **15%** | Drivers/flags + narrative; **not** opaque point-estimate ML only |
+| **Explainability** | **15%** | Drivers/flags + clear rationale; **not** a single opaque number |
 
 **Strong solution (PDF quote)**
 
-> Not: “We trained a regression model to predict price.”  
+> Not: “Here is one number with no traceable logic.”  
 > Instead: “We designed a **structured** valuation and liquidity **framework** where **location** sets the base, **property attributes** adjust value, **market forces** define exit risk, and outputs are **transparent** and **range-based**.”
 
 ---
@@ -362,7 +362,7 @@ The brief organizes signals into **five** areas. Below: **PDF intent**, **data i
 | Outputs | All 7 output groups (ranges where required) |
 | Core engine | Circle-rate floor + adjustments + comp blend + liquidity discount + resale index + time range + confidence |
 | Inputs | Mandatory + key optional fields |
-| Explainability | `key_drivers`, `risk_flags`; optional **LLM** summary **grounded** in JSON only |
+| Explainability | `key_drivers`, `risk_flags`, `data_sources` |
 | Deploy | Single app (e.g. Next.js) + `/api/estimate` |
 | Data | Illustrative circle rates + **seed comps** + optional **public listing** JSON (portal URLs + cookies, ToS-aware) |
 
@@ -373,13 +373,10 @@ The brief organizes signals into **five** areas. Below: **PDF intent**, **data i
 - Stronger **fraud** rules (BHK vs sqft, geocode vs city)  
 - **Momentum** stub only if repeatable time series exists  
 
-### I.3 P2 — ML / AI (only with data & governance)
+### I.3 P2 — Future extensions (optional, with governance)
 
-| Track | Role |
-|-------|------|
-| **Hedonic / GBM** on curated comps | Improve calibration; keep **ranges** + **explainability** (e.g. SHAP) |
-| **LLM** | Q&A and memo strictly **conditioned** on engine JSON |
-| **Vision** | Photos only with **datasets** and **human** oversight |
+- Statistical calibration on **curated** comps only if ranges + explainability are preserved.
+- Any narrative features must remain **grounded** in engine output (no invented ₹).
 
 ---
 
@@ -407,7 +404,7 @@ This table relates the **PDF** to the **current repo** (see [`ARCHITECTURE.md`](
 | Fungibility (standard vs niche) | Partial | Sub-type multipliers |
 | Photos | Not used | Bonus in PDF — future vision pipeline |
 | Fraud safeguards | Partial | Size extreme flag; model vs median flag; keyword context |
-| AI explanation | Optional | OpenAI when `OPENAI_API_KEY` + flag |
+| Narrative add-ons | Not in core app | Engine outputs are self-explanatory via drivers/flags |
 | No proprietary transactions | Respected | Seed + public listing JSON only |
 
 **Gaps to highlight in demos**

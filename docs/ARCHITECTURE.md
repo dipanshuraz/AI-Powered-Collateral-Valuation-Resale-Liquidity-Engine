@@ -8,8 +8,7 @@
 
 - **Next.js** (App Router) on **Vercel**, **server-only** secrets.
 - **Outputs:** `market_value_range`, `distress_value_range`, `resale_potential_index`, `estimated_time_to_sell_days`, `confidence_score`, `key_drivers`, `risk_flags` (+ extended fields for comps/sources).
-- **₹ values** come from **code + data**, not from unconstrained LLM output.
-- **Optional AI:** post-hoc explanation of structured JSON (`lib/ai/explain.ts`).
+- **₹ values** come from **code + data** (rules, tables, comps). The pricing path is **fully deterministic** and auditable.
 
 ---
 
@@ -34,7 +33,6 @@ flowchart TB
   end
   subgraph external [External I/O]
     GEO[Nominatim geocode]
-    LLM[OpenAI optional]
   end
 
   UI --> API
@@ -44,8 +42,6 @@ flowchart TB
   RE --> GEO
   MB --> RE
   P99 --> RE
-  RE --> LLM
-  LLM --> API
 ```
 
 ---
@@ -53,7 +49,7 @@ flowchart TB
 ## 3. Request / response (contract)
 
 - **Validation:** `lib/schemas.ts` (`estimateRequestSchema` / `estimateResponseSchema`).
-- **Main handler:** `app/api/estimate/route.ts` → `runEstimate()` → optional `explainEstimate()`.
+- **Main handler:** `app/api/estimate/route.ts` → `runEstimate()`.
 
 **Key request groups**
 
@@ -64,7 +60,6 @@ flowchart TB
 | MagicBricks | `magicbricks.enabled`, `city_id`, `locality_id`, `search_url` |
 | Other portals | `listing_feeds[]` — `{ provider: 99acres \| housing \| nobroker, enabled, search_url }` |
 | Context | `collateral_context` — free text (keyword heuristics for drivers only) |
-| AI | `include_ai_summary` |
 
 **Key response extensions**
 
@@ -100,28 +95,19 @@ flowchart TB
 
 ---
 
-## 6. AI (bounded)
-
-| Task | Location | Rule |
-|------|----------|------|
-| Explain estimate | `lib/ai/explain.ts` | System prompt: do **not** invent numbers; only explain JSON |
-| Price generation | — | **Not** used |
-
----
-
-## 7. Tech stack
+## 6. Tech stack
 
 | Layer | Choice |
 |-------|--------|
 | Framework | Next.js 15, React 18, App Router |
-| API | Route Handlers, `runtime = nodejs` for fetch + OpenAI |
+| API | Route Handlers, `runtime = nodejs` for fetch (geocode, portals) |
 | Validation | Zod |
 | Styling | Tailwind (`app/globals.css` utility classes) |
 | Data | Static JSON in `data/` (no DB required for v1) |
 
 ---
 
-## 8. Deployment
+## 7. Deployment
 
 - **Vercel:** connect repo; set env vars in project settings.
 - Portal fetches are **on-demand** in the estimate request (keep URLs short; cookies in env).
@@ -129,18 +115,17 @@ flowchart TB
 
 ---
 
-## 9. Risks & mitigations
+## 8. Risks & mitigations
 
 | Risk | Mitigation |
 |------|------------|
 | Portal returns HTML / 403 | `portal_feed_errors` / `magicbricks_error`; seed comps still work |
-| LLM hallucination | Numbers only from engine JSON in prompt; optional stricter checks later |
 | ToS on automation | Document in README/PRD; production → licensed data |
 | Geocode wrong | User can paste lat/lon; confidence + flags |
 
 ---
 
-## 10. Directory (as implemented)
+## 9. Directory (as implemented)
 
 ```
 app/
@@ -177,7 +162,6 @@ lib/
     listing-source.ts
     normalize-json-listing.ts
     fetch-portal-search-url.ts
-  ai/explain.ts
 data/
   circle_rates.json
   comps_seed.json
@@ -189,7 +173,7 @@ docs/
 
 ---
 
-## 11. Known limits
+## 10. Known limits
 
 - Circle-rate table is **illustrative**, not exhaustive pan-India.
 - Portal JSON **shapes change** — heuristic parsers may need updates per observed response.

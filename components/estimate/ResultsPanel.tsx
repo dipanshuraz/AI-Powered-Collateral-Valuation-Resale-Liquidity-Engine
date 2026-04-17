@@ -92,15 +92,6 @@ export function ResultsPanel({ result }: { result: EstimateResponsePayload }) {
         </ul>
       </div>
 
-      {result.ai_summary && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50/80 p-4 text-sm text-blue-950 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100">
-          <p className="text-xs font-medium text-blue-800 dark:text-blue-300">
-            AI summary
-          </p>
-          <p className="mt-2 whitespace-pre-wrap leading-relaxed">{result.ai_summary}</p>
-        </div>
-      )}
-
       <details className="rounded-lg border border-neutral-200 dark:border-neutral-700">
         <summary className="cursor-pointer px-4 py-3 text-xs text-neutral-500">
           Raw JSON
