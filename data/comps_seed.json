@@ -1,0 +1,114 @@
+{
+  "listings": [
+    {
+      "id": "dlf-1",
+      "lat": 28.4595,
+      "lon": 77.0266,
+      "city": "Gurugram",
+      "price_inr": 11800000,
+      "area_sqft": 1450,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-11-01"
+    },
+    {
+      "id": "dlf-2",
+      "lat": 28.4723,
+      "lon": 77.051,
+      "city": "Gurugram",
+      "price_inr": 9200000,
+      "area_sqft": 1280,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-10-20"
+    },
+    {
+      "id": "noida-1",
+      "lat": 28.5744,
+      "lon": 77.334,
+      "city": "Noida",
+      "price_inr": 10500000,
+      "area_sqft": 1650,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-09-15"
+    },
+    {
+      "id": "noida-2",
+      "lat": 28.5355,
+      "lon": 77.391,
+      "city": "Noida",
+      "price_inr": 7800000,
+      "area_sqft": 1200,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-11-05"
+    },
+    {
+      "id": "south-delhi-1",
+      "lat": 28.5272,
+      "lon": 77.2189,
+      "city": "New Delhi",
+      "price_inr": 22000000,
+      "area_sqft": 1800,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-08-01"
+    },
+    {
+      "id": "whitefield-1",
+      "lat": 12.9698,
+      "lon": 77.75,
+      "city": "Bengaluru",
+      "price_inr": 13500000,
+      "area_sqft": 1420,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-10-10"
+    },
+    {
+      "id": "whitefield-2",
+      "lat": 12.9789,
+      "lon": 77.7611,
+      "city": "Bengaluru",
+      "price_inr": 9800000,
+      "area_sqft": 1180,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-11-12"
+    },
+    {
+      "id": "pune-baner-1",
+      "lat": 18.5596,
+      "lon": 73.7868,
+      "city": "Pune",
+      "price_inr": 9200000,
+      "area_sqft": 1250,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-10-18"
+    },
+    {
+      "id": "pune-baner-2",
+      "lat": 18.5642,
+      "lon": 73.7915,
+      "city": "Pune",
+      "price_inr": 7800000,
+      "area_sqft": 1100,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-11-02"
+    },
+    {
+      "id": "pune-kharadi-1",
+      "lat": 18.5549,
+      "lon": 73.9417,
+      "city": "Pune",
+      "price_inr": 11200000,
+      "area_sqft": 1420,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-09-28"
+    },
+    {
+      "id": "pune-wakad-1",
+      "lat": 18.5997,
+      "lon": 73.7639,
+      "city": "Pune",
+      "price_inr": 8100000,
+      "area_sqft": 1180,
+      "property_sub_type": "apartment",
+      "posted_at": "2025-11-08"
+    }
+  ]
+}

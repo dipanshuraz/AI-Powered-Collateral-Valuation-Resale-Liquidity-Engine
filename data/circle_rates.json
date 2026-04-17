@@ -1,0 +1,59 @@
+{
+  "assumptions_version": "2026.04.demo-1",
+  "cities": [
+    {
+      "id": "delhi",
+      "match": ["delhi", "new delhi", "ncr", "gurgaon", "gurugram", "noida", "ghaziabad", "faridabad"],
+      "tier": 1,
+      "circle_rate_inr_per_sqft_floor": 8500,
+      "notes": "Illustrative floor for demo; replace with notification-backed zone rates for production."
+    },
+    {
+      "id": "mumbai",
+      "match": ["mumbai", "thane", "navi mumbai"],
+      "tier": 1,
+      "circle_rate_inr_per_sqft_floor": 12000,
+      "notes": "Illustrative."
+    },
+    {
+      "id": "bengaluru",
+      "match": ["bengaluru", "bangalore"],
+      "tier": 1,
+      "circle_rate_inr_per_sqft_floor": 7000,
+      "notes": "Illustrative."
+    },
+    {
+      "id": "hyderabad",
+      "match": ["hyderabad", "cyberabad"],
+      "tier": 2,
+      "circle_rate_inr_per_sqft_floor": 5500,
+      "notes": "Illustrative."
+    },
+    {
+      "id": "pune",
+      "match": ["pune", "pimpri"],
+      "tier": 2,
+      "circle_rate_inr_per_sqft_floor": 6000,
+      "notes": "Illustrative."
+    },
+    {
+      "id": "chennai",
+      "match": ["chennai", "madras"],
+      "tier": 2,
+      "circle_rate_inr_per_sqft_floor": 5800,
+      "notes": "Illustrative."
+    },
+    {
+      "id": "kolkata",
+      "match": ["kolkata", "howrah"],
+      "tier": 2,
+      "circle_rate_inr_per_sqft_floor": 5200,
+      "notes": "Illustrative."
+    }
+  ],
+  "tier_fallback": {
+    "1": { "circle_rate_inr_per_sqft_floor": 6500, "liquidity_bonus": 8 },
+    "2": { "circle_rate_inr_per_sqft_floor": 4800, "liquidity_bonus": 4 },
+    "3": { "circle_rate_inr_per_sqft_floor": 3200, "liquidity_bonus": 0 }
+  }
+}
