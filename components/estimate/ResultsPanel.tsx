@@ -1,9 +1,23 @@
 "use client";
 
+import { useMemo } from "react";
 import type { EstimateResponsePayload } from "@/lib/flow/types";
 import { fmtInr } from "@/lib/format";
+import { ResultsExplainer } from "@/components/estimate/ResultsExplainer";
+
+/** Omit verbose fields already surfaced elsewhere or intentionally hidden from the main UI. */
+function resultJsonForDeveloperView(r: EstimateResponsePayload) {
+  const {
+    resolved_location: _loc,
+    key_drivers: _drivers,
+    risk_flags: _flags,
+    ...rest
+  } = r;
+  return rest;
+}
 
 export function ResultsPanel({ result }: { result: EstimateResponsePayload }) {
+  const rawJson = useMemo(() => resultJsonForDeveloperView(result), [result]);
   return (
     <div className="space-y-8">
       <div className="rounded-xl border border-neutral-200 bg-gradient-to-b from-neutral-50 to-white p-6 dark:border-neutral-700 dark:from-neutral-900/50 dark:to-neutral-950">
@@ -68,36 +82,14 @@ export function ResultsPanel({ result }: { result: EstimateResponsePayload }) {
         </dl>
       </div>
 
-      {result.resolved_location && (
-        <pre className="overflow-x-auto rounded-lg border border-neutral-200 bg-neutral-50 p-4 font-mono text-[10px] text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900/40 dark:text-neutral-400">
-          {JSON.stringify(result.resolved_location, null, 2)}
-        </pre>
-      )}
-
-      <div>
-        <p className="text-xs font-medium text-neutral-500">Drivers</p>
-        <ul className="mt-2 list-inside list-disc text-sm text-neutral-800 dark:text-neutral-200">
-          {result.key_drivers.map((d) => (
-            <li key={d}>{d}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <p className="text-xs font-medium text-neutral-500">Risk flags</p>
-        <ul className="mt-2 list-inside list-disc text-sm text-neutral-800 dark:text-neutral-200">
-          {result.risk_flags.map((d) => (
-            <li key={d}>{d}</li>
-          ))}
-        </ul>
-      </div>
+      <ResultsExplainer />
 
       <details className="rounded-lg border border-neutral-200 dark:border-neutral-700">
         <summary className="cursor-pointer px-4 py-3 text-xs text-neutral-500">
           Raw JSON
         </summary>
         <pre className="max-h-80 overflow-auto border-t border-neutral-200 p-4 font-mono text-[10px] dark:border-neutral-700">
-          {JSON.stringify(result, null, 2)}
+          {JSON.stringify(rawJson, null, 2)}
         </pre>
       </details>
 

@@ -40,8 +40,11 @@ export function AppShell({
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
         {children}
       </main>
-      <footer className="border-t border-neutral-200 py-6 text-center text-[10px] text-neutral-400 dark:border-neutral-800">
-        Demo — not financial or legal advice. Estimates only.
+      <footer className="border-t border-neutral-200 py-6 text-center text-[10px] leading-relaxed text-neutral-400 dark:border-neutral-800">
+        <p>Demo — not financial, appraisal, or legal advice.</p>
+        <p className="mt-1 max-w-lg mx-auto">
+          Outputs are ranges from a rule engine; not a substitute for licensed valuation or credit decisions.
+        </p>
       </footer>
     </div>
   );
