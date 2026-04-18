@@ -1,0 +1,14 @@
+{
+  "price_model": {
+    "rmse": 728544.1291,
+    "mae": 541869.3851,
+    "r2": 0.9742
+  },
+  "liquidity_model": {
+    "rmse": 4.9416,
+    "mae": 3.8818,
+    "r2": 0.8372
+  },
+  "artifacts_path": "C:\\Users\\nisha\\Documents\\Codex\\2026-04-17-you-are-a-senior-ai-ml\\artifacts",
+  "dataset_path": "C:\\Users\\nisha\\Documents\\Codex\\2026-04-17-you-are-a-senior-ai-ml\\data\\synthetic_real_estate_data.csv"
+}
