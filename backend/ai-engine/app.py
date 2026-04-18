@@ -23,6 +23,16 @@ app = FastAPI(
     description="Collateral valuation system trained on real Pune property data.",
 )
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all for now
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class PropertyRequest(BaseModel):
     bhk: int = Field(..., ge=1, le=10, example=3)
