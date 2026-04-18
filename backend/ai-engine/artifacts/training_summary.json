@@ -1,0 +1,32 @@
+{
+  "dataset_path": "C:\\Users\\nisha\\Documents\\Codex\\2026-04-17-you-are-a-senior-ai-ml\\data\\clean_pune_data.csv",
+  "row_count": 686,
+  "feature_columns": [
+    "bhk",
+    "sqft",
+    "bathrooms",
+    "lat",
+    "lon",
+    "price_per_sq_ft",
+    "has_lift",
+    "has_parking",
+    "has_gym",
+    "has_security",
+    "has_power_backup",
+    "has_swimming_pool"
+  ],
+  "price_model": {
+    "rmse": 1024104.5387,
+    "mae": 676456.375,
+    "r2": 0.9534
+  },
+  "liquidity_model": {
+    "rmse": 0.4071,
+    "mae": 0.2,
+    "r2": 0.999
+  },
+  "saved_models": {
+    "model_price": "C:\\Users\\nisha\\Documents\\Codex\\2026-04-17-you-are-a-senior-ai-ml\\artifacts\\model_price.pkl",
+    "model_liquidity": "C:\\Users\\nisha\\Documents\\Codex\\2026-04-17-you-are-a-senior-ai-ml\\artifacts\\model_liquidity.pkl"
+  }
+}
