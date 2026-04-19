@@ -25,7 +25,7 @@ export async function geocodeAddress(
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "TenzorCollateralEngine/0.1 (demo; contact: local)",
+        "User-Agent": "EstimateEngine/0.1 (demo; contact: local)",
       },
       signal: controller.signal,
       next: { revalidate: 3600 },

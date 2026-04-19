@@ -25,6 +25,13 @@ export async function POST(req: Request) {
     return NextResponse.json(result);
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Estimate failed";
-    return NextResponse.json({ error: msg }, { status: 400 });
+    const inputOrGeocode =
+      msg.includes("Provide both lat") ||
+      msg.includes("Geocoding failed") ||
+      msg.includes("Provide an address");
+    return NextResponse.json(
+      { error: msg },
+      { status: inputOrGeocode ? 400 : 500 }
+    );
   }
 }

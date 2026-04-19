@@ -10,11 +10,24 @@ import {
 } from "react";
 import { buildEstimateBody } from "@/lib/flow/build-estimate-body";
 import { getDefaultFormState } from "@/lib/flow/defaults";
-import type { EstimateFormState, EstimateResponsePayload } from "@/lib/flow/types";
+import type {
+  CollateralUploads,
+  EstimateFormState,
+  EstimateResponsePayload,
+} from "@/lib/flow/types";
+
+const emptyUploads = (): CollateralUploads => ({
+  papers: [],
+  photosInternal: [],
+  photosExternal: [],
+});
 
 type Ctx = {
   form: EstimateFormState;
   setForm: (patch: Partial<EstimateFormState>) => void;
+  /** Client-only uploads (counts sent to API; files stay in browser). */
+  uploads: CollateralUploads;
+  setUploads: (u: CollateralUploads | ((prev: CollateralUploads) => CollateralUploads)) => void;
   /** Bumps when the flow resets so optional signature pad state remounts cleanly. */
   acknowledgmentPadKey: number;
   activeStep: number;
@@ -31,6 +44,7 @@ const EstimateFormContext = createContext<Ctx | null>(null);
 
 export function EstimateFormProvider({ children }: { children: ReactNode }) {
   const [form, setFormState] = useState<EstimateFormState>(getDefaultFormState);
+  const [uploads, setUploads] = useState<CollateralUploads>(emptyUploads);
   const [acknowledgmentPadKey, setAcknowledgmentPadKey] = useState(0);
   const [activeStep, setActiveStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,6 +59,7 @@ export function EstimateFormProvider({ children }: { children: ReactNode }) {
 
   const resetFlow = useCallback(() => {
     setFormState(getDefaultFormState());
+    setUploads(emptyUploads());
     setAcknowledgmentPadKey((k) => k + 1);
     setActiveStep(1);
     setResult(null);
@@ -55,7 +70,7 @@ export function EstimateFormProvider({ children }: { children: ReactNode }) {
     setError(null);
     setIsSubmitting(true);
     try {
-      const body = buildEstimateBody(form);
+      const body = buildEstimateBody(form, uploads);
       const res = await fetch("/api/estimate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,12 +91,14 @@ export function EstimateFormProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [form]);
+  }, [form, uploads]);
 
   const value = useMemo(
     () => ({
       form,
       setForm,
+      uploads,
+      setUploads,
       acknowledgmentPadKey,
       activeStep,
       setActiveStep,
@@ -95,6 +112,8 @@ export function EstimateFormProvider({ children }: { children: ReactNode }) {
     [
       form,
       setForm,
+      uploads,
+      setUploads,
       acknowledgmentPadKey,
       activeStep,
       isSubmitting,

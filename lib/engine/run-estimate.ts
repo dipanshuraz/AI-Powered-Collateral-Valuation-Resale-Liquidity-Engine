@@ -12,6 +12,10 @@ import {
 } from "@/lib/magicbricks/fetch-property-search";
 import { amenityScoreFromLandmarks } from "@/lib/magicbricks/landmarks";
 import { fetchPortalSearchUrl } from "@/lib/portals/fetch-portal-search-url";
+import {
+  infrastructureProximityIndex,
+  neighbourhoodQualityScore,
+} from "@/lib/engine/user-place-scores";
 
 function clamp(n: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, n));
@@ -208,6 +212,24 @@ export async function runEstimate(
 
   const amenity = amenityScoreFromLandmarks(comps.within_radius);
 
+  const infraDefault = {
+    metro: 3,
+    rail: 3,
+    highway: 3,
+    commercial_hub: 3,
+    school: 3,
+    hospital: 3,
+  };
+  const infraIn = input.infrastructure_proximity ?? infraDefault;
+  const infraIdx = infrastructureProximityIndex(infraIn);
+
+  const neighDefault = {
+    land_use: "mixed_use" as const,
+    planning: "mixed" as const,
+  };
+  const neighIn = input.neighbourhood ?? neighDefault;
+  const neighScore = neighbourhoodQualityScore(neighIn);
+
   const contextBlob = [
     input.collateral_context?.location_notes,
     input.collateral_context?.legal_rera_notes,
@@ -230,6 +252,12 @@ export async function runEstimate(
   const amenityBump = 1 + Math.min(0.025, amenity.score * 0.03);
   blendedMid *= amenityBump;
 
+  const infraNeighBump =
+    1 +
+    ((infraIdx - 50) / 100) * 0.09 +
+    ((neighScore - 58) / 100) * 0.07;
+  blendedMid *= clamp(infraNeighBump, 0.93, 1.1);
+
   let confidence = 0.52;
   if (circleSource === "city_table") confidence += 0.14;
   if (circleSource === "tier_fallback") confidence -= 0.08;
@@ -242,6 +270,23 @@ export async function runEstimate(
   const portalErrCt = Object.keys(portalErrors).length;
   if (portalErrCt > 0)
     confidence = clamp(confidence - Math.min(0.09, portalErrCt * 0.03), 0.2, 0.9);
+  confidence = clamp(
+    confidence + (infraIdx / 100) * 0.035 + (neighScore / 100) * 0.025,
+    0.2,
+    0.92
+  );
+  const um = input.collateral_uploads_meta;
+  if (um) {
+    const docCt =
+      um.paper_count + um.internal_photo_count + um.external_photo_count;
+    if (docCt > 0) {
+      confidence = clamp(
+        confidence + Math.min(0.05, docCt * 0.012),
+        0.2,
+        0.92
+      );
+    }
+  }
   confidence = clamp(confidence, 0.28, 0.9);
 
   const spread = clamp(0.11 + (1 - confidence) * 0.12, 0.07, 0.2);
@@ -256,6 +301,7 @@ export async function runEstimate(
     liquidityDiscount += 0.03;
   if (comps.count < 2) liquidityDiscount += 0.04;
   liquidityDiscount -= amenity.score * 0.04;
+  liquidityDiscount -= (infraIdx / 100) * 0.035 + (neighScore / 100) * 0.025;
 
   liquidityDiscount = clamp(liquidityDiscount, 0.12, 0.32);
 
@@ -279,6 +325,9 @@ export async function runEstimate(
     : getTierFallback(tier).liquidity_bonus;
   resale += tierLiqBonus;
 
+  resale += Math.round((infraIdx - 50) / 6);
+  resale += Math.round((neighScore - 58) / 8);
+
   resale = clamp(Math.round(resale), 12, 96);
 
   const tLow = clamp(Math.round(220 - resale * 1.85), 30, 400);
@@ -297,6 +346,11 @@ export async function runEstimate(
   drivers.push(...contextTags);
   if (input.rental_yield_percent && input.rental_yield_percent >= 2.5)
     drivers.push("rental_yield_support");
+  if (input.infrastructure_proximity)
+    drivers.push("user_infrastructure_proximity");
+  if (input.neighbourhood) drivers.push("user_neighbourhood_quality");
+  if (um && um.paper_count + um.internal_photo_count + um.external_photo_count > 0)
+    drivers.push("collateral_uploads_declared");
 
   const flags: string[] = [];
   if (circleSource === "tier_fallback")
@@ -336,6 +390,8 @@ export async function runEstimate(
     comp_radius_km: compRadius,
     data_sources: sources,
     assumptions_version: file.assumptions_version,
+    infrastructure_proximity_index: infraIdx,
+    neighbourhood_quality_score: neighScore,
     resolved_location: {
       lat,
       lon,

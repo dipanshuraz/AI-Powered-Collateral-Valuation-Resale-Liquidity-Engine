@@ -89,7 +89,7 @@ export async function fetchMagicBricksListings(
         accept: "application/json, text/plain, */*",
         "accept-language": "en-US,en;q=0.9",
         "user-agent":
-          "Mozilla/5.0 (compatible; TenzorCollateralDemo/1.0; +local)",
+          "Mozilla/5.0 (compatible; EstimateEngine/1.0; +local)",
         referer: `https://www.magicbricks.com/property-for-sale/residential-real-estate?cityName=${params.cityId}`,
         ...(cookie ? { cookie } : {}),
       },
@@ -152,7 +152,7 @@ export async function fetchMagicBricksFromSearchUrl(
         accept: "application/json, text/plain, */*",
         "accept-language": "en-US,en;q=0.9",
         "user-agent":
-          "Mozilla/5.0 (compatible; TenzorCollateralDemo/1.0; +local)",
+          "Mozilla/5.0 (compatible; EstimateEngine/1.0; +local)",
         referer: "https://www.magicbricks.com/",
         ...(cookie ? { cookie } : {}),
       },

@@ -18,8 +18,28 @@ const OptionalAcknowledgmentSignature = dynamic(
   }
 );
 
+const LAND_USE: Record<string, string> = {
+  residential: "Residential",
+  mixed_use: "Mixed-use",
+  commercial_industrial: "Commercial / industrial",
+};
+
+const PLANNING: Record<string, string> = {
+  planned: "Planned",
+  unplanned: "Unplanned",
+  mixed: "Mixed",
+};
+
 export function StepReview() {
-  const { form } = useEstimateForm();
+  const { form, uploads } = useEstimateForm();
+  const docSummary = [
+    uploads.papers.length ? `${uploads.papers.length} paper(s)` : null,
+    uploads.photosInternal.length ? `${uploads.photosInternal.length} internal photo(s)` : null,
+    uploads.photosExternal.length ? `${uploads.photosExternal.length} external photo(s)` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <div className="space-y-4">
       <p className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -38,8 +58,20 @@ export function StepReview() {
         />
         <ReviewRow label="Radius" value={`${form.compRadius} km`} />
         <ReviewRow
+          label="Documents (counts only)"
+          value={docSummary || "None selected"}
+        />
+        <ReviewRow
           label="Property"
           value={`${form.propertyType} · ${form.subType} · ${form.sizeSqft} sqft · ${form.ageBucket}`}
+        />
+        <ReviewRow
+          label="Infra proximity (1–5)"
+          value={`Metro ${form.infraMetro} · Rail ${form.infraRail} · Hwy ${form.infraHighway} · Hub ${form.infraCommercialHub} · School ${form.infraSchool} · Hospital ${form.infraHospital}`}
+        />
+        <ReviewRow
+          label="Neighbourhood"
+          value={`${LAND_USE[form.neighbourhoodLandUse] ?? form.neighbourhoodLandUse} · ${PLANNING[form.neighbourhoodPlanning] ?? form.neighbourhoodPlanning}`}
         />
         <ReviewRow
           label="Legal"

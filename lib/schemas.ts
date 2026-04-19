@@ -69,6 +69,32 @@ export const estimateRequestSchema = z.object({
       documents_summary: z.string().max(8000).optional(),
     })
     .optional(),
+  /** 1 = far / poor access, 5 = very close — user-declared proximity (PDF infra layer). */
+  infrastructure_proximity: z
+    .object({
+      metro: z.coerce.number().int().min(1).max(5),
+      rail: z.coerce.number().int().min(1).max(5),
+      highway: z.coerce.number().int().min(1).max(5),
+      commercial_hub: z.coerce.number().int().min(1).max(5),
+      school: z.coerce.number().int().min(1).max(5),
+      hospital: z.coerce.number().int().min(1).max(5),
+    })
+    .optional(),
+  /** Neighbourhood character (PDF neighbourhood quality). */
+  neighbourhood: z
+    .object({
+      land_use: z.enum(["residential", "mixed_use", "commercial_industrial"]),
+      planning: z.enum(["planned", "unplanned", "mixed"]),
+    })
+    .optional(),
+  /** Counts only — files are not uploaded; improves confidence & drivers. */
+  collateral_uploads_meta: z
+    .object({
+      paper_count: z.coerce.number().int().min(0).max(50),
+      internal_photo_count: z.coerce.number().int().min(0).max(50),
+      external_photo_count: z.coerce.number().int().min(0).max(50),
+    })
+    .optional(),
 });
 
 export type EstimateRequest = z.infer<typeof estimateRequestSchema>;
@@ -98,6 +124,10 @@ export const estimateResponseSchema = z.object({
   /** Per-provider errors when a listing feed URL was enabled but fetch/parse failed. */
   portal_feed_errors: z.record(z.string()).optional(),
   landmark_signals: z.array(z.string()).optional(),
+  /** 0–100 composite from user infra proximity inputs (1–5 per axis). */
+  infrastructure_proximity_index: z.number().min(0).max(100).optional(),
+  /** 0–100 composite from land use + planning inputs. */
+  neighbourhood_quality_score: z.number().min(0).max(100).optional(),
   comps_breakdown: z
     .object({
       seed_in_radius: z.number(),

@@ -30,6 +30,23 @@ export type EstimateFormState = {
   docsSummary: string;
   /** PNG data URL from optional review-step signature pad (client-only; not sent to API). */
   acknowledgmentSignatureDataUrl: string;
+  /** 1–5: proximity (5 = closest/best access). Sent as `infrastructure_proximity`. */
+  infraMetro: string;
+  infraRail: string;
+  infraHighway: string;
+  infraCommercialHub: string;
+  infraSchool: string;
+  infraHospital: string;
+  /** PDF neighbourhood quality. */
+  neighbourhoodLandUse: "residential" | "mixed_use" | "commercial_industrial";
+  neighbourhoodPlanning: "planned" | "unplanned" | "mixed";
+};
+
+/** Client-only file lists for documents step (not JSON-serialized). */
+export type CollateralUploads = {
+  papers: File[];
+  photosInternal: File[];
+  photosExternal: File[];
 };
 
 export type EstimateResponsePayload = {
@@ -57,4 +74,6 @@ export type EstimateResponsePayload = {
     portals_raw_fetched?: Record<string, number>;
   };
   portal_feed_errors?: Record<string, string>;
+  infrastructure_proximity_index?: number;
+  neighbourhood_quality_score?: number;
 };

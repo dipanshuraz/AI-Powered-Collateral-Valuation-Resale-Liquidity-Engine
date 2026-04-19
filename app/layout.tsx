@@ -16,8 +16,8 @@ const mono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Tenzor",
-    template: "%s | Tenzor",
+    default: "EstimateEngine",
+    template: "%s | EstimateEngine",
   },
   description:
     "Collateral valuation and resale liquidity engine — range-based estimates (demo).",
@@ -31,8 +31,8 @@ export default function RootLayout({
   const fontVars = [sans.variable, mono.variable].join(" ");
 
   return (
-    <html lang="en" className={fontVars}>
-      <body className={`${sans.className} min-h-screen antialiased`}>
+    <html lang="en" className={`${fontVars} scheme-light`}>
+      <body className={`${sans.className} min-h-screen bg-white text-neutral-900 antialiased`}>
         {children}
       </body>
     </html>

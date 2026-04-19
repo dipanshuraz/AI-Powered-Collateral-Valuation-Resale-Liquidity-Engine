@@ -35,5 +35,13 @@ export function getDefaultFormState(): EstimateFormState {
     legalNotes: "",
     docsSummary: "",
     acknowledgmentSignatureDataUrl: "",
+    infraMetro: "3",
+    infraRail: "3",
+    infraHighway: "3",
+    infraCommercialHub: "3",
+    infraSchool: "3",
+    infraHospital: "3",
+    neighbourhoodLandUse: "mixed_use",
+    neighbourhoodPlanning: "mixed",
   };
 }

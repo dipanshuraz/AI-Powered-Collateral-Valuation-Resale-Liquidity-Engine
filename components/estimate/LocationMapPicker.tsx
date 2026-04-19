@@ -13,7 +13,9 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-const MAP_HEIGHT = "min(320px, 55vh)";
+const MAP_HEIGHT_DEFAULT = "min(320px, 55vh)";
+/** Prominent full-width strip above the form */
+const MAP_HEIGHT_FULL_WIDTH = "min(420px, 56vh)";
 
 /** Rough center of India when no coords yet. */
 const DEFAULT_CENTER: LatLngExpression = [20.5937, 78.9629];
@@ -23,6 +25,8 @@ type Props = {
   lon: string;
   onPositionChange: (next: { lat: string; lon: string }) => void;
   onAddressResolved?: (formattedAddress: string) => void;
+  /** Full-width block map (typical: stacked above address fields). */
+  variant?: "default" | "fullWidth";
 };
 
 function parseLng(s: string): number | null {
@@ -102,9 +106,13 @@ export function LocationMapPicker({
   lon,
   onPositionChange,
   onAddressResolved,
+  variant = "default",
 }: Props) {
   useLeafletDefaultIcon();
   const mapContainerReady = useDeferredMapMount();
+  const fullWidth = variant === "fullWidth";
+  const mapHeightCss = fullWidth ? MAP_HEIGHT_FULL_WIDTH : MAP_HEIGHT_DEFAULT;
+
   /** Unique id for the map wrapper so React never reuses a DOM node Leaflet has touched. */
   const mapInstanceKey = useMemo(
     () => `leaflet-${Math.random().toString(36).slice(2, 11)}`,
@@ -183,21 +191,25 @@ export function LocationMapPicker({
 
   const zoom = parsed ? 17 : 5;
 
+  const mapShellClass =
+    "w-full overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700 [&_.leaflet-container]:z-[1] [&_.leaflet-container]:w-full [&_.leaflet-container]:font-[family-name:var(--font-geist-sans)] [&_.leaflet-container]:min-h-[240px]";
+
   return (
-    <div className="space-y-2">
-      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+    <div className="w-full space-y-2">
+      <p className="shrink-0 text-xs text-neutral-500 dark:text-neutral-400">
         Free <strong>OpenStreetMap</strong> tiles — tap the map or drag the pin. Use the layer
-        control (top-right) to switch to aerial imagery (Esri) for rough land context. Address
-        fill uses our server + Nominatim (throttled).
+        control (top-right) to switch to aerial imagery (Esri) for rough land context. Dragging the
+        pin fills the address via reverse geocode (throttled).
       </p>
-      <div
-        key={mapInstanceKey}
-        className="overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700 [&_.leaflet-container]:z-[1] [&_.leaflet-container]:min-h-[240px] [&_.leaflet-container]:w-full [&_.leaflet-container]:font-[family-name:var(--font-geist-sans)]"
-      >
+      <div key={mapInstanceKey} className={mapShellClass}>
         {!mapContainerReady ? (
           <div
             className="animate-pulse rounded-lg bg-neutral-100 dark:bg-neutral-800"
-            style={{ height: MAP_HEIGHT, minHeight: "240px", width: "100%" }}
+            style={{
+              height: mapHeightCss,
+              minHeight: fullWidth ? "280px" : "240px",
+              width: "100%",
+            }}
             aria-hidden
           />
         ) : (
@@ -205,11 +217,11 @@ export function LocationMapPicker({
             center={center}
             zoom={zoom}
             scrollWheelZoom
-            className="[&_.leaflet-container]:h-[min(320px,55vh)]"
+            className="[&_.leaflet-container]:h-full"
             style={{
-              height: MAP_HEIGHT,
+              height: mapHeightCss,
               width: "100%",
-              minHeight: "240px",
+              minHeight: fullWidth ? "280px" : "240px",
             }}
           >
             <LayersControl position="topright">

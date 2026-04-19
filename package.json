@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "rm -rf .next",
     "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
+    "dev:webpack": "next dev",
+    "dev:clean": "npm run clean && next dev",
+    "dev:clean:turbo": "npm run clean && next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -11,6 +16,8 @@
   },
   "dependencies": {
     "@ark-ui/react": "^5.36.1",
+    "@gsap/react": "^2.1.2",
+    "gsap": "^3.15.0",
     "leaflet": "^1.9.4",
     "next": "^15.5.15",
     "react": "^18.3.1",

@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
   try {
     const res = await fetch(url.toString(), {
       headers: {
-        "User-Agent": "TenzorCollateralEngine/0.1 (demo; reverse-geocode)",
+        "User-Agent": "EstimateEngine/0.1 (demo; reverse-geocode)",
         "Accept-Language": "en",
       },
       signal: controller.signal,
@@ -47,7 +47,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "geocoder unavailable" }, { status: 502 });
     }
 
-    const data = (await res.json()) as { display_name?: string };
+    const raw = await res.text();
+    let data: { display_name?: string };
+    try {
+      data = raw.trim() ? (JSON.parse(raw) as { display_name?: string }) : {};
+    } catch {
+      return NextResponse.json({ error: "geocoder unavailable" }, { status: 502 });
+    }
     const display_name = data.display_name;
     if (!display_name) {
       return NextResponse.json({ error: "no result" }, { status: 404 });

@@ -10,28 +10,20 @@
   --muted: 115 115 115;
   --line: 229 229 229;
   --accent: 23 23 23;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface: 10 10 10;
-    --ink: 250 250 250;
-    --muted: 163 163 163;
-    --line: 38 38 38;
-    --accent: 250 250 250;
-  }
+  color-scheme: light;
 }
 
 body {
   color: rgb(var(--ink));
   background: rgb(var(--surface));
+  min-width: 0;
 }
 
 /* Minimal field chrome */
 .field {
-  @apply w-full border-0 border-b border-neutral-300 bg-transparent py-2 text-sm outline-none transition-colors placeholder:text-neutral-400 focus:border-neutral-900 dark:border-neutral-600 dark:focus:border-neutral-100;
+  @apply w-full border-0 border-b border-neutral-300 bg-transparent py-2 text-sm outline-none transition-colors placeholder:text-neutral-400 focus:border-neutral-900;
 }
 
 .field-select {
-  @apply w-full cursor-pointer border-0 border-b border-neutral-300 bg-transparent py-2 text-sm outline-none focus:border-neutral-900 dark:border-neutral-600 dark:focus:border-neutral-100;
+  @apply w-full cursor-pointer border-0 border-b border-neutral-300 bg-transparent py-2 text-sm outline-none focus:border-neutral-900;
 }

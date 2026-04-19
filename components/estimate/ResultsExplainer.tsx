@@ -1,5 +1,7 @@
 "use client";
 
+import { BRAND_NAME } from "@/lib/brand";
+
 /**
  * Expanded definitions for results — how to read bands, indices, and optional rows.
  */
@@ -7,15 +9,15 @@ export function ResultsExplainer() {
   return (
     <details
       open
-      className="rounded-lg border border-neutral-200 bg-neutral-50/80 dark:border-neutral-700 dark:bg-neutral-900/30"
+      className="min-w-0 overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50/80 dark:border-neutral-700 dark:bg-neutral-900/30"
     >
       <summary className="cursor-pointer px-4 py-3 text-left text-sm font-medium text-neutral-800 dark:text-neutral-200">
         Understanding these numbers
       </summary>
       <div className="space-y-6 border-t border-neutral-200 px-4 pb-5 pt-4 text-xs leading-relaxed text-neutral-600 dark:border-neutral-700 dark:text-neutral-400">
         <p className="text-[13px] text-neutral-700 dark:text-neutral-300">
-          Tenzor outputs are produced by a <strong className="font-medium text-neutral-900 dark:text-neutral-100">transparent rule engine</strong> (circle-rate tables, property adjustments, comparable listings in your chosen radius, liquidity heuristics). They are{" "}
-          <strong className="font-medium text-neutral-900 dark:text-neutral-100">ranges and indices</strong>, not a single “true” price and not a substitute for a licensed appraisal or a lender’s own policy.
+          {BRAND_NAME} outputs are produced by a <strong className="font-medium text-neutral-900 dark:text-neutral-100">transparent rule engine</strong> (circle-rate tables, property adjustments, comparable listings in your chosen radius, liquidity heuristics). They are{" "}
+          <strong className="font-medium text-neutral-900 dark:text-neutral-100">ranges and indices</strong>, not a single “true” price and not a substitute for a licensed appraisal or a lender’s own policy. Use the <strong className="font-medium text-neutral-900 dark:text-neutral-100">info icons</strong> next to each line in the results card for short definitions.
         </p>
 
         <section>
@@ -67,9 +69,6 @@ export function ResultsExplainer() {
             Optional rows (when shown)
           </h3>
           <ul className="mt-2 list-disc space-y-2 pl-4">
-            <li>
-              <strong className="text-neutral-800 dark:text-neutral-200">Comps split</strong> — Breakdown of how many comps came from bundled seed data vs MagicBricks / other portals (labels like MB, 99acres, H, NB). Helps you see whether the estimate leaned on seed listings or live feeds.
-            </li>
             <li>
               <strong className="text-neutral-800 dark:text-neutral-200">Landmark signals</strong> — Coarse amenity hints when portal comp payloads include landmark metadata; they nudge the model slightly and are not a full GIS study.
             </li>
